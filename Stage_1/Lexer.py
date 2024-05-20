@@ -92,33 +92,33 @@ class Lexer:
 		self.__words["FORWARD"] = Token(Tag.FORWARD, "FORWARD")
 		self.__words["FD"] = Token(Tag.FORWARD, "FORWARD")
 		## ADD THE REST RESERVED WORDS, REMEMBER THAT SOME RESERVER WORDS HAVE THE SAME TAG ##
-		self.__Tokens["BACKWARD"] = Token(Tag.BACKWARD, "BACKWARD")
-		self.__Tokens["BK"] = Token(Tag.BACKWARD, "BACKWARD")
-		self.__Tokens["LEFT"] = Token(Tag.LEFT, "LEFT")
-		self.__Tokens["LT"] = Token(Tag.LEFT, "LEFT")
-		self.__Tokens["RIGHT"] = Token(Tag.RIGHT, "RIGHT")
-		self.__Tokens["RT"] = Token(Tag.RIGHT, "RIGHT")
-		self.__Tokens["SETX"] = Token(Tag.SETX, "SETX")
-		self.__Tokens["SETY"] = Token(Tag.SETY, "SETY")
-		self.__Tokens["SETXY"] = Token(Tag.SETXY, "SETXY")
-		self.__Tokens["HOME"] = Token(Tag.HOME, "HOME")
-		self.__Tokens["CLEAR"] = Token(Tag.CLEAR, "CLEAR")
-		self.__Tokens["CLS"] = Token(Tag.CLEAR, "CLEAR")
-		self.__Tokens["ARC"] = Token(Tag.ARC, "ARC")
-		self.__Tokens["PENUP"] = Token(Tag.PENUP, "PENUP")
-		self.__Tokens["PU"] = Token(Tag.PENUP, "PENUP")
-		self.__Tokens["PENDOWN"] = Token(Tag.PENDOWN, "PENDOWN")
-		self.__Tokens["PD"] = Token(Tag.PENDOWN, "PENDOWN")
-		self.__Tokens["COLOR"] = Token(Tag.COLOR, "COLOR")
-		self.__Tokens["PENWIDTH"] = Token(Tag.PENWIDTH, "PENWIDTH")
-		self.__Tokens["PRINT"] = Token(Tag.PRINT, "PRINT")
-		self.__Tokens["REPEAT"] = Token(Tag.REPEAT, "REPEAT")
-		self.__Tokens["IF"] = Token(Tag.IF, "IF")
-		self.__Tokens["IFELSE"] = Token(Tag.IFELSE, "IFELSE")
-		self.__Tokens["NOT"] = Token(Tag.NOT, "NOT")
-		self.__Tokens["OR"] = Token(Tag.OR, "OR")
-		self.__Tokens["AND"] = Token(Tag.AND, "AND")
-		self.__Tokens["MOD"] = Token(Tag.MOD, "MOD")
+		self.__words["BACKWARD"] = Token(Tag.BACKWARD, "BACKWARD")
+		self.__words["BK"] = Token(Tag.BACKWARD, "BACKWARD")
+		self.__words["LEFT"] = Token(Tag.LEFT, "LEFT")
+		self.__words["LT"] = Token(Tag.LEFT, "LEFT")
+		self.__words["RIGHT"] = Token(Tag.RIGHT, "RIGHT")
+		self.__words["RT"] = Token(Tag.RIGHT, "RIGHT")
+		self.__words["SETX"] = Token(Tag.SETX, "SETX")
+		self.__words["SETY"] = Token(Tag.SETY, "SETY")
+		self.__words["SETXY"] = Token(Tag.SETXY, "SETXY")
+		self.__words["HOME"] = Token(Tag.HOME, "HOME")
+		self.__words["CLEAR"] = Token(Tag.CLEAR, "CLEAR")
+		self.__words["CLS"] = Token(Tag.CLEAR, "CLEAR")
+		self.__words["ARC"] = Token(Tag.ARC, "ARC")
+		self.__words["PENUP"] = Token(Tag.PENUP, "PENUP")
+		self.__words["PU"] = Token(Tag.PENUP, "PENUP")
+		self.__words["PENDOWN"] = Token(Tag.PENDOWN, "PENDOWN")
+		self.__words["PD"] = Token(Tag.PENDOWN, "PENDOWN")
+		self.__words["COLOR"] = Token(Tag.COLOR, "COLOR")
+		self.__words["PENWIDTH"] = Token(Tag.PENWIDTH, "PENWIDTH")
+		self.__words["PRINT"] = Token(Tag.PRINT, "PRINT")
+		self.__words["REPEAT"] = Token(Tag.REPEAT, "REPEAT")
+		self.__words["IF"] = Token(Tag.IF, "IF")
+		self.__words["IFELSE"] = Token(Tag.IFELSE, "IFELSE")
+		self.__words["NOT"] = Token(Tag.NOT, "NOT")
+		self.__words["OR"] = Token(Tag.OR, "OR")
+		self.__words["AND"] = Token(Tag.AND, "AND")
+		self.__words["MOD"] = Token(Tag.MOD, "MOD")
 
 	def read(self):
 		self.__peek = self.__input.read(1)
@@ -144,7 +144,7 @@ class Lexer:
 		## ADD CODE TO SKIP COMMENTS HERE ##
 		if self.__peek == '%':
 			while True:
-				self.__read()
+				self.read()
 				if self.__peek == '\n':
 					break
 			self.__skipSpaces()
@@ -158,7 +158,7 @@ class Lexer:
 				return Token(ord('<'))
 		elif self.__peek == '>':
 			if self.readch('='):
-				return Word(Tag.GEQ, ">=")
+				return Token(Tag.GEQ, ">=")
 			else:
 				return Token(ord('>'))
 		elif self.__peek == '#':
@@ -196,13 +196,13 @@ class Lexer:
 					break
 			## ADD CODE TO PROCESS DECIMAL PART HERE ##
 			if self.__peek  == '.':
-				self.__read()
+				self.read()
 				if self.__peek.isdigit():
 					divisor = 10.0
 					while True:
 						val = val + (float(self.__peek) / divisor)
 						divisor = divisor * 10.0
-						self.__read()
+						self.read()
 						if not(self.__peek.isdigit()):
 							break
 				else:
