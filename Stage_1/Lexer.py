@@ -76,8 +76,7 @@ class Token:
 		elif self.__tag == Tag.STRING:
 			return "string constant"
 		else:
-			return "'" + chr(self.__tag) + "'" 
-			return "'" + chr(self.__tag) + "'" 
+			return "'" + chr(self.__tag) + "'"
 			
 class Lexer:
 	__peek = ' '
@@ -91,7 +90,6 @@ class Lexer:
 		self.__words["VAR"] = Token(Tag.VAR, "VAR")
 		self.__words["FORWARD"] = Token(Tag.FORWARD, "FORWARD")
 		self.__words["FD"] = Token(Tag.FORWARD, "FORWARD")
-		## ADD THE REST RESERVED WORDS, REMEMBER THAT SOME RESERVER WORDS HAVE THE SAME TAG ##
 		self.__words["BACKWARD"] = Token(Tag.BACKWARD, "BACKWARD")
 		self.__words["BK"] = Token(Tag.BACKWARD, "BACKWARD")
 		self.__words["LEFT"] = Token(Tag.LEFT, "LEFT")
@@ -120,11 +118,11 @@ class Lexer:
 		self.__words["AND"] = Token(Tag.AND, "AND")
 		self.__words["MOD"] = Token(Tag.MOD, "MOD")
 
-	def read(self):
+	def __read(self):
 		self.__peek = self.__input.read(1)
 	
-	def readch(self, c):
-		self.read()
+	def __readch(self, c):
+		self.__read()
 		if self.__peek != c:
 			return False
 
@@ -134,42 +132,41 @@ class Lexer:
 	def __skipSpaces(self):
 		while True:
 			if self.__peek == ' ' or self.__peek == '\t' or self.__peek == '\r' or self.__peek == '\n':
-				self.read()
+				self.__read()
 			else:
 				break
 	
 	def scan(self):
 		self.__skipSpaces()
 
-		## ADD CODE TO SKIP COMMENTS HERE ##
 		if self.__peek == '%':
 			while True:
-				self.read()
+				self.__read()
 				if self.__peek == '\n':
 					break
 			self.__skipSpaces()
 
 		if self.__peek == '<':
-			if self.readch('='):
+			if self.__readch('='):
 				return Token(Tag.LEQ, "<=")
-			elif self.readch('>'):
+			elif self.__readch('>'):
 				return Token(Tag.NEQ, "<>")
 			else:
 				return Token(ord('<'))
 		elif self.__peek == '>':
-			if self.readch('='):
+			if self.__readch('='):
 				return Token(Tag.GEQ, ">=")
 			else:
 				return Token(ord('>'))
 		elif self.__peek == '#':
-			if self.readch('t'):
+			if self.__readch('t'):
 				return Token(Tag.TRUE, "#t")
-			elif self.readch('f'):
+			elif self.__readch('f'):
 				return Token(Tag.FALSE, "#f")
 			else:
 				return Token(ord('#'))
 		elif self.__peek == ':':
-			if self.readch('='):
+			if self.__readch('='):
 				#print("reading :=")
 				return Token(Tag.ASSIGN, ":=")
 			else:
@@ -179,30 +176,29 @@ class Lexer:
 			val = ""
 			while True:
 				val = val + self.__peek
-				self.read()
+				self.__read()
 				if self.__peek == '"':
 					break
 			
 			val = val + self.__peek
-			self.read()
+			self.__read()
 			return Token(Tag.STRING, val)
 
 		if self.__peek.isdigit():
 			val = 0
 			while True:
 				val = (val * 10) + int(self.__peek)
-				self.read()
+				self.__read()
 				if not(self.__peek.isdigit()):
 					break
-			## ADD CODE TO PROCESS DECIMAL PART HERE ##
 			if self.__peek  == '.':
-				self.read()
+				self.__read()
 				if self.__peek.isdigit():
 					divisor = 10.0
 					while True:
 						val = val + (float(self.__peek) / divisor)
 						divisor = divisor * 10.0
-						self.read()
+						self.__read()
 						if not(self.__peek.isdigit()):
 							break
 				else:
@@ -213,7 +209,7 @@ class Lexer:
 			val = ""
 			while True:
 				val = val + self.__peek.upper()
-				self.read()
+				self.__read()
 				if not(self.__peek.isalnum()):
 					break
 
