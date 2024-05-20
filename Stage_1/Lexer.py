@@ -17,6 +17,28 @@ class Tag(IntEnum):
 	## ADD THE MISSING RESERVED WORDS, JUST FOLLOW THE NUMBER SEQUENCE ##
 	VAR = 457
 	FORWARD = 458
+	BACKWARD = 459
+	LEFT = 460
+	RIGHT = 461
+	SETX = 462
+	SETY = 463
+	SETXY = 464
+	CLEAR = 465
+	CIRCLE = 466
+	ARC = 467
+	PENUP = 468
+	PENDOWN = 469
+	COLOR = 470
+	PENWIDTH = 471
+	PRINT = 472
+	REPEAT = 473
+	IF = 474
+	IFELSE = 475
+	HOME = 476
+	NOT = 477
+	OR = 478
+	AND = 479
+	MOD = 480
 	
 class Token:
 	__tag = Tag.EOF
@@ -70,6 +92,33 @@ class Lexer:
 		self.__words["FORWARD"] = Token(Tag.FORWARD, "FORWARD")
 		self.__words["FD"] = Token(Tag.FORWARD, "FORWARD")
 		## ADD THE REST RESERVED WORDS, REMEMBER THAT SOME RESERVER WORDS HAVE THE SAME TAG ##
+		self.__Tokens["BACKWARD"] = Token(Tag.BACKWARD, "BACKWARD")
+		self.__Tokens["BK"] = Token(Tag.BACKWARD, "BACKWARD")
+		self.__Tokens["LEFT"] = Token(Tag.LEFT, "LEFT")
+		self.__Tokens["LT"] = Token(Tag.LEFT, "LEFT")
+		self.__Tokens["RIGHT"] = Token(Tag.RIGHT, "RIGHT")
+		self.__Tokens["RT"] = Token(Tag.RIGHT, "RIGHT")
+		self.__Tokens["SETX"] = Token(Tag.SETX, "SETX")
+		self.__Tokens["SETY"] = Token(Tag.SETY, "SETY")
+		self.__Tokens["SETXY"] = Token(Tag.SETXY, "SETXY")
+		self.__Tokens["HOME"] = Token(Tag.HOME, "HOME")
+		self.__Tokens["CLEAR"] = Token(Tag.CLEAR, "CLEAR")
+		self.__Tokens["CLS"] = Token(Tag.CLEAR, "CLEAR")
+		self.__Tokens["ARC"] = Token(Tag.ARC, "ARC")
+		self.__Tokens["PENUP"] = Token(Tag.PENUP, "PENUP")
+		self.__Tokens["PU"] = Token(Tag.PENUP, "PENUP")
+		self.__Tokens["PENDOWN"] = Token(Tag.PENDOWN, "PENDOWN")
+		self.__Tokens["PD"] = Token(Tag.PENDOWN, "PENDOWN")
+		self.__Tokens["COLOR"] = Token(Tag.COLOR, "COLOR")
+		self.__Tokens["PENWIDTH"] = Token(Tag.PENWIDTH, "PENWIDTH")
+		self.__Tokens["PRINT"] = Token(Tag.PRINT, "PRINT")
+		self.__Tokens["REPEAT"] = Token(Tag.REPEAT, "REPEAT")
+		self.__Tokens["IF"] = Token(Tag.IF, "IF")
+		self.__Tokens["IFELSE"] = Token(Tag.IFELSE, "IFELSE")
+		self.__Tokens["NOT"] = Token(Tag.NOT, "NOT")
+		self.__Tokens["OR"] = Token(Tag.OR, "OR")
+		self.__Tokens["AND"] = Token(Tag.AND, "AND")
+		self.__Tokens["MOD"] = Token(Tag.MOD, "MOD")
 
 	def read(self):
 		self.__peek = self.__input.read(1)
@@ -93,6 +142,12 @@ class Lexer:
 		self.__skipSpaces()
 
 		## ADD CODE TO SKIP COMMENTS HERE ##
+		if self.__peek == '%':
+			while True:
+				self.__read()
+				if self.__peek == '\n':
+					break
+			self.__skipSpaces()
 
 		if self.__peek == '<':
 			if self.readch('='):
@@ -140,6 +195,18 @@ class Lexer:
 				if not(self.__peek.isdigit()):
 					break
 			## ADD CODE TO PROCESS DECIMAL PART HERE ##
+			if self.__peek  == '.':
+				self.__read()
+				if self.__peek.isdigit():
+					divisor = 10.0
+					while True:
+						val = val + (float(self.__peek) / divisor)
+						divisor = divisor * 10.0
+						self.__read()
+						if not(self.__peek.isdigit()):
+							break
+				else:
+					raise Exception('Lexical Exception')
 			return Token(Tag.NUMBER, val)
 
 		if self.__peek.isalpha():
